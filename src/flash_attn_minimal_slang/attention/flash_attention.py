@@ -41,8 +41,6 @@ class FlashAttention:
                 {
                     "include_paths": [ASSET_ROOT / "shader"],
                     "defines": {
-                        "kBlockSizeKv": str(32),
-                        "kBlockSizeQ": str(32),
                         "kBatchSize": str(batch_size),
                         "kHeadSize": str(num_heads),
                         "kSequenceLength": str(num_query_tokens),
@@ -133,6 +131,9 @@ class FlashAttention:
         )
         self.buffer_maximum.copy_from_numpy(
             np.full(np.prod(self.maximum_shape), -np.inf).astype(np.float32)
+        )
+        self.buffer_output.copy_from_numpy(
+            np.zeros(np.prod(self.output_shape)).astype(np.float32)
         )
 
         group_count = (
